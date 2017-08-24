@@ -5,6 +5,7 @@ const FunctorIterable = require('./')
 
 const array = Object.freeze([1, 2, 3, 4, 5])
 const string = 'abcd'
+const set = new Set(string)
 const double = e => e + e
 const half = e => e / 2
 
@@ -58,7 +59,7 @@ test('map', function (t) {
         st.end()
     })
     t.test('non-empty string', function (st) {
-        const iterable = new FunctorIterable(string).map(double)
+        const iterable = new FunctorIterable(set).map(double)
         const expected = [...string].map(double)
         st.deepEqual([...iterable], expected,
             'must return a new iterable with transformed values')

@@ -36,7 +36,7 @@
     "tape": "^4.8.0"
   },
   "dependencies": {
-    "is-typed-array": "^1.0.4"
+    "array-inmutable": "^0.1.1"
   },
   "pre-commit": {
     "run": "test"

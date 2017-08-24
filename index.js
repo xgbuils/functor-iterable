@@ -1,53 +1,32 @@
-const isTypedArray = require('is-typed-array')
+const InmutableArray = require('array-inmutable')
 
-function arrayReduce (f, acc, arr) {
-    const length = arr.length
-    for (let i = 0; i < length; ++i) {
-        acc = f(acc, arr[i])
-    }
-    return acc
+function FunctorIterable (iterable) {
+    this.iterable = iterable
+    this.fs = InmutableArray([])
+}
+
+function map (f) {
+    const obj = Object.create(this.constructor.prototype)
+    obj.fs = this.fs.push(f)
+    obj.iterable = this.iterable
+    return obj
 }
 
 const apply = (a, f) => f(a)
 
-function descriptorsFactory (iterable, fs) {
-    return {
-        iterable: {
-            value: iterable
-        },
-        fs: {
-            value: fs
-        }
-    }
-}
-
-class FunctorIterable {
-    constructor (iterable) {
-        Object.defineProperties(this,
-            descriptorsFactory(iterable, []))
-    }
-
-    map (fn) {
-        return Object.create(FunctorIterable.prototype,
-            descriptorsFactory(this.iterable, this.fs.concat([fn])))
-    }
-
-    * [Symbol.iterator] () {
-        const iterable = this.iterable
-        const isOptimizable = Array.isArray(iterable)
-            || typeof iterable === 'string'
-            || isTypedArray(iterable)
-        if (isOptimizable) {
-            const length = iterable.length
-            for (let i = 0; i < length; ++i) {
-                yield arrayReduce(apply, iterable[i], this.fs)
-            }
-        } else {
+Object.defineProperties(FunctorIterable.prototype, {
+    map: {
+        value: map
+    },
+    [Symbol.iterator]: {
+        * value () {
+            const fs = this.fs
+            const iterable = this.iterable
             for (const val of iterable) {
-                yield arrayReduce(apply, val, this.fs)
+                yield fs.reduce(apply, val)
             }
         }
     }
-}
+})
 
 module.exports = FunctorIterable
