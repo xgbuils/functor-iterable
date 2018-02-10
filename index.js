@@ -1,13 +1,15 @@
-const InmutableArray = require('array-inmutable')
+const arrayOf = require('immutable-array.of')
+const push = require('immutable-array.push')
+const reduce = require('immutable-array.reduce')
 
 function FunctorIterable (iterable) {
     this.iterable = iterable
-    this.fs = InmutableArray([])
+    this.fs = arrayOf([])
 }
 
 function map (f) {
     const obj = Object.create(this.constructor.prototype)
-    obj.fs = this.fs.push(f)
+    obj.fs = push(f, this.fs)
     obj.iterable = this.iterable
     return obj
 }
@@ -23,7 +25,7 @@ Object.defineProperties(FunctorIterable.prototype, {
             const fs = this.fs
             const iterable = this.iterable
             for (const val of iterable) {
-                yield fs.reduce(apply, val)
+                yield reduce(apply, val, fs)
             }
         }
     }

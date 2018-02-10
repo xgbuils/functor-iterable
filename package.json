@@ -36,7 +36,9 @@
     "tape": "^4.8.0"
   },
   "dependencies": {
-    "array-inmutable": "^0.1.1"
+    "immutable-array.of": "^0.1.0",
+    "immutable-array.push": "^0.1.0",
+    "immutable-array.reduce": "^0.1.0"
   },
   "pre-commit": {
     "run": "test"
