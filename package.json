@@ -1,6 +1,6 @@
 {
   "name": "functor-iterable",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Iterable that implements optimized map method",
   "main": "index.js",
   "scripts": {
